@@ -7,6 +7,8 @@ module "this" {
   subnet_ids                    = [] # the subnet objects should be passed
   additional_iam_policy_arns    = []
   container_port                = 8080
+  task_cpu                      = 512
+  task_memory                   = 2048
   container_cpu                 = 512
   container_memory              = 2048
   alb_dns_name                  = "example.us-west-2.elb.amazonaws.com"
