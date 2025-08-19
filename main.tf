@@ -73,6 +73,14 @@ resource "aws_ecs_service" "this" {
     }
   }
 
+  dynamic "service_registries" {
+    for_each = var.service_discovery_service_arn != null ? [1] : []
+
+    content {
+      registry_arn = var.service_discovery_service_arn
+    }
+  }
+
   # desired_count is ignored as it can change due to autoscaling policy
   lifecycle {
     ignore_changes = [desired_count]

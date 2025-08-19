@@ -85,7 +85,6 @@ module "application" {
 ```
 
 <!-- BEGIN_TF_DOCS -->
-
 ## Requirements
 
 | Name | Version |
@@ -152,7 +151,7 @@ module "application" {
 | <a name="input_cloudwatch_log_group_migration_name"></a> [cloudwatch\_log\_group\_migration\_name](#input\_cloudwatch\_log\_group\_migration\_name) | Overwrite existing aws\_cloudwatch\_log\_group migration name. | `string` | `null` | no |
 | <a name="input_cloudwatch_log_group_name"></a> [cloudwatch\_log\_group\_name](#input\_cloudwatch\_log\_group\_name) | Overwrite existing aws\_cloudwatch\_log\_group name. | `string` | `null` | no |
 | <a name="input_container_command"></a> [container\_command](#input\_container\_command) | Container command. | `list(string)` | `[]` | no |
-| <a name="input_container_cpu"></a> [container\_cpu](#input\_container\_cpu) | The number of cpu units used by the task | `number` | `512` | no |
+| <a name="input_container_cpu"></a> [container\_cpu](#input\_container\_cpu) | The number of cpu units used by the task | `number` | `0` | no |
 | <a name="input_container_depends_on"></a> [container\_depends\_on](#input\_container\_depends\_on) | n/a | <pre>list(object({<br/>    containerName = string<br/>    condition     = string<br/>  }))</pre> | `[]` | no |
 | <a name="input_container_entryPoint"></a> [container\_entryPoint](#input\_container\_entryPoint) | Container entrypoint | `list(string)` | `[]` | no |
 | <a name="input_container_environment"></a> [container\_environment](#input\_container\_environment) | The container environment variables | <pre>list(object({<br/>    name  = string<br/>    value = string<br/>  }))</pre> | `[]` | no |
@@ -185,6 +184,7 @@ module "application" {
 | <a name="input_security_group_ids"></a> [security\_group\_ids](#input\_security\_group\_ids) | List of security groups to associate with the task or service | `list(string)` | `[]` | no |
 | <a name="input_service_connect_configuration"></a> [service\_connect\_configuration](#input\_service\_connect\_configuration) | Service connect configuration within namespace. | <pre>object({<br/>    namespace = string<br/>    service = optional(object({<br/>      discovery_name = string<br/>      port_name      = string<br/>      client_alias = object({<br/>        dns_name = string<br/>        port     = number<br/>      })<br/>    }), null)<br/>  })</pre> | <pre>{<br/>  "namespace": null,<br/>  "service": null<br/>}</pre> | no |
 | <a name="input_service_desired_count"></a> [service\_desired\_count](#input\_service\_desired\_count) | Number of services running in parallel | `number` | `2` | no |
+| <a name="input_service_discovery_service_arn"></a> [service\_discovery\_service\_arn](#input\_service\_discovery\_service\_arn) | Service discovery service arn. | `string` | `null` | no |
 | <a name="input_service_max_capacity"></a> [service\_max\_capacity](#input\_service\_max\_capacity) | Maximum of services running in parallel | `number` | `2` | no |
 | <a name="input_subnet_ids"></a> [subnet\_ids](#input\_subnet\_ids) | List of subnets to associate with the task or service | `list(string)` | `[]` | no |
 | <a name="input_task_cpu"></a> [task\_cpu](#input\_task\_cpu) | Task cpu. | `number` | n/a | yes |
@@ -205,5 +205,4 @@ module "application" {
 | <a name="output_container_definitions"></a> [container\_definitions](#output\_container\_definitions) | The container definitions of ECS application |
 | <a name="output_ecs_service_name"></a> [ecs\_service\_name](#output\_ecs\_service\_name) | The ECS service name |
 | <a name="output_task_role_arn"></a> [task\_role\_arn](#output\_task\_role\_arn) | The task role arn |
-
 <!-- END_TF_DOCS -->
