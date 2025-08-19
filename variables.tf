@@ -51,7 +51,7 @@ variable "container_port" {
 variable "container_cpu" {
   description = "The number of cpu units used by the task"
   type        = number
-  default     = 512
+  default     = 0
 }
 
 variable "container_memory" {
@@ -346,4 +346,10 @@ variable "service_connect_configuration" {
     namespace = null
     service   = null
   }
+}
+
+variable "service_discovery_service_arn" {
+  description = "Service discovery service arn."
+  type        = string
+  default     = null
 }

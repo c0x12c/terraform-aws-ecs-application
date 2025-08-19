@@ -46,7 +46,7 @@ locals {
       image     = var.container_image
       essential = true
       user      = var.user
-      cpu       = 0
+      cpu       = var.container_cpu
       memory    = var.container_memory
       mountPoints = var.persistent_volume != null ? [
         {
