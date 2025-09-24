@@ -198,7 +198,6 @@ data "aws_ssm_parameter" "ecs_optimized_ami" {
 resource "aws_launch_template" "this" {
   count = var.launch_type == "EC2" ? 1 : 0
 
-  region        = var.region
   image_id      = jsondecode(data.aws_ssm_parameter.ecs_optimized_ami.value)["image_id"]
   instance_type = var.ec2_configuration.instance_type
   vpc_security_group_ids = var.security_group_ids
