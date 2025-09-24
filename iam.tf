@@ -90,3 +90,29 @@ resource "aws_iam_role_policy_attachment" "ecs_task_role_additional_policies_att
   role       = aws_iam_role.task_role.name
   policy_arn = var.additional_iam_policy_arns[count.index]
 }
+
+data "aws_iam_policy_document" "ecs_task_role_execute_command_ssm_message" {
+  statement {
+    sid       = "ExecutionSSM"
+    effect    = "Allow"
+    actions   = ["ssmmessages:CreateControlChannel",
+                "ssmmessages:CreateDataChannel",
+                "ssmmessages:OpenControlChannel",
+                "ssmmessages:OpenDataChannel"]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_policy" "ecs_task_role_execute_command_ssm_message" {
+  count      = var.enable_execute_command ? 1 : 0
+  name        = "${var.name}-task-policy-ssm"
+  description = var.task_policy_ssm_description
+  policy      = data.aws_iam_policy_document.ecs_task_role_execute_command_ssm_message.json
+}
+
+
+resource "aws_iam_role_policy_attachment" "ecs_task_role_execute_command_ssm_message_policy_attachment" {
+  count      = var.enable_execute_command ? 1 : 0
+  role       = aws_iam_role.task_role.name
+  policy_arn = aws_iam_policy.ecs_task_role_execute_command_ssm_message[count.index].arn
+}

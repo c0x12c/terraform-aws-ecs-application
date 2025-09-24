@@ -1,6 +1,8 @@
 locals {
   cloudwatch_log_group_name = var.cloudwatch_log_group_name != null ? var.cloudwatch_log_group_name : "${var.name}-task"
 
+  is_fargate = var.launch_type == "FARGATE" ? true : false
+
   log_configuration = {
     logDriver = "awslogs"
     options = {

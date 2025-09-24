@@ -31,11 +31,12 @@ resource "aws_ecs_service" "this" {
   cluster                            = var.ecs_cluster_id
   task_definition                    = aws_ecs_task_definition.this.arn
   desired_count                      = var.service_desired_count
-  deployment_minimum_healthy_percent = 50
-  deployment_maximum_percent         = 200
-  health_check_grace_period_seconds  = 60
-  launch_type                        = "FARGATE"
-  scheduling_strategy                = "REPLICA"
+  enable_execute_command             = var.enable_execute_command
+  deployment_minimum_healthy_percent = var.deployment_minimum_healthy_percent
+  deployment_maximum_percent         = var.deployment_maximum_percent
+  health_check_grace_period_seconds  = var.health_check_grace_period_seconds
+  launch_type                        = var.launch_type
+  scheduling_strategy                = local.is_fargate ? "REPLICA" : var.scheduling_strategy
   force_new_deployment               = var.force_new_deployment
 
   network_configuration {
@@ -94,7 +95,7 @@ https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_
 resource "aws_ecs_task_definition" "this" {
   family                   = "${var.name}-task"
   network_mode             = "awsvpc"
-  requires_compatibilities = ["FARGATE"]
+  requires_compatibilities = [var.launch_type]
   /**
    * 256 (.25 vCPU) - 512 MB, 1 GB, 2 GB
    * 512 (.5 vCPU) - 1 GB, 2 GB, 3 GB, 4 GB
