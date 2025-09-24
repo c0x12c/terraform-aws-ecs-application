@@ -400,7 +400,7 @@ variable "enable_autoscaling" {
 variable "create_iam_instance_profile" {
   description = "Whether to create an IAM instance profile for the ECS service."
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "ec2_configuration" {
