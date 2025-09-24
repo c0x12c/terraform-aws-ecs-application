@@ -93,21 +93,26 @@ resource "aws_iam_role_policy_attachment" "ecs_task_role_additional_policies_att
 
 data "aws_iam_policy_document" "ecs_task_role_execute_command_ssm_message" {
   statement {
-    sid       = "ExecutionSSM"
-    effect    = "Allow"
-    actions   = ["ssmmessages:CreateControlChannel",
-                "ssmmessages:CreateDataChannel",
-                "ssmmessages:OpenControlChannel",
-                "ssmmessages:OpenDataChannel"]
+    sid    = "ExecutionSSM"
+    effect = "Allow"
+    actions = ["ssmmessages:CreateControlChannel",
+      "ssmmessages:CreateDataChannel",
+      "ssmmessages:OpenControlChannel",
+    "ssmmessages:OpenDataChannel"]
     resources = ["*"]
   }
 }
 
 resource "aws_iam_policy" "ecs_task_role_execute_command_ssm_message" {
-  count      = var.enable_execute_command ? 1 : 0
-  name        = "${var.name}-task-policy-ssm"
-  description = var.task_policy_ssm_description
+  count       = var.enable_execute_command ? 1 : 0
+  name        = "${var.name}-task-policy-ssm-message"
+  description = "Policy that allows access to the SSM messages"
   policy      = data.aws_iam_policy_document.ecs_task_role_execute_command_ssm_message.json
+
+  depends_on = [
+    aws_iam_policy.ssm,
+    aws_iam_policy.secrets
+  ]
 }
 
 
@@ -115,4 +120,41 @@ resource "aws_iam_role_policy_attachment" "ecs_task_role_execute_command_ssm_mes
   count      = var.enable_execute_command ? 1 : 0
   role       = aws_iam_role.task_role.name
   policy_arn = aws_iam_policy.ecs_task_role_execute_command_ssm_message[count.index].arn
+}
+
+data "aws_iam_policy_document" "assume_role_policy" {
+  count = var.create_iam_instance_profile ? 1 : 0
+
+  statement {
+    sid     = "EC2AssumeRole"
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["ec2.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role" "this" {
+  count = var.create_iam_instance_profile ? 1 : 0
+
+  name        = "ec2-ecs-instance-role"
+  description = "Iam role for EC2"
+
+  assume_role_policy = data.aws_iam_policy_document.assume_role_policy[0].json
+}
+
+resource "aws_iam_role_policy_attachment" "this" {
+  count      = var.create_iam_instance_profile ? 1 : 0
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
+  role       = aws_iam_role.this[0].name
+}
+
+resource "aws_iam_instance_profile" "this" {
+  count = var.create_iam_instance_profile ? 1 : 0
+
+  role = aws_iam_role.this[0].name
+
+  name = "ec2-ecs-instance-profile"
 }

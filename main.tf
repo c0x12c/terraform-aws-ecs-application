@@ -140,6 +140,7 @@ aws_appautoscaling_target provides an Application AutoScaling ScalableTarget res
 https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/appautoscaling_target
 */
 resource "aws_appautoscaling_target" "ecs_target" {
+  count              = var.enable_autoscaling ? 1 : 0
   max_capacity       = var.service_max_capacity
   min_capacity       = var.service_desired_count
   resource_id        = "service/${var.ecs_cluster_name}/${aws_ecs_service.this.name}"
@@ -152,11 +153,12 @@ aws_appautoscaling_policy provides an Application AutoScaling Policy resource.
 https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/appautoscaling_policy
 */
 resource "aws_appautoscaling_policy" "ecs_policy_memory" {
+  count              = var.enable_autoscaling ? 1 : 0
   name               = "memory-autoscaling"
   policy_type        = "TargetTrackingScaling"
-  resource_id        = aws_appautoscaling_target.ecs_target.resource_id
-  scalable_dimension = aws_appautoscaling_target.ecs_target.scalable_dimension
-  service_namespace  = aws_appautoscaling_target.ecs_target.service_namespace
+  resource_id        = aws_appautoscaling_target.ecs_target[0].resource_id
+  scalable_dimension = aws_appautoscaling_target.ecs_target[0].scalable_dimension
+  service_namespace  = aws_appautoscaling_target.ecs_target[0].service_namespace
 
   target_tracking_scaling_policy_configuration {
     predefined_metric_specification {
@@ -170,11 +172,12 @@ resource "aws_appautoscaling_policy" "ecs_policy_memory" {
 }
 
 resource "aws_appautoscaling_policy" "ecs_policy_cpu" {
+  count              = var.enable_autoscaling ? 1 : 0
   name               = "cpu-autoscaling"
   policy_type        = "TargetTrackingScaling"
-  resource_id        = aws_appautoscaling_target.ecs_target.resource_id
-  scalable_dimension = aws_appautoscaling_target.ecs_target.scalable_dimension
-  service_namespace  = aws_appautoscaling_target.ecs_target.service_namespace
+  resource_id        = aws_appautoscaling_target.ecs_target[0].resource_id
+  scalable_dimension = aws_appautoscaling_target.ecs_target[0].scalable_dimension
+  service_namespace  = aws_appautoscaling_target.ecs_target[0].service_namespace
 
   target_tracking_scaling_policy_configuration {
     predefined_metric_specification {
@@ -184,5 +187,45 @@ resource "aws_appautoscaling_policy" "ecs_policy_cpu" {
     target_value       = 60
     scale_in_cooldown  = 300
     scale_out_cooldown = 300
+  }
+}
+
+data "aws_ssm_parameter" "ecs_optimized_ami" {
+  name = "/aws/service/ecs/optimized-ami/amazon-linux-2023/recommended"
+}
+
+
+resource "aws_launch_template" "this" {
+  count = var.launch_type == "EC2" ? 1 : 0
+
+  region        = var.region
+  image_id      = jsondecode(data.aws_ssm_parameter.ecs_optimized_ami.value)["image_id"]
+  instance_type = var.ec2_configuration.instance_type
+  vpc_security_group_ids = var.security_group_ids
+  user_data = var.ec2_configuration.user_data
+
+  iam_instance_profile {
+    name = aws_iam_instance_profile.this[0].name
+  }
+}
+
+
+resource "aws_autoscaling_group" "this" {
+  count = var.launch_type == "EC2" ? 1 : 0
+
+  name = "${var.name}-autoscaling-group-ecs-${var.environment}"
+
+  vpc_zone_identifier       = var.subnet_ids
+  target_group_arns         = []
+  health_check_type         = "EC2"
+  health_check_grace_period = 300
+
+  min_size         = 1
+  max_size         = 2
+  desired_capacity = 1
+
+  launch_template {
+    id      = aws_launch_template.this[0].id
+    version = aws_launch_template.this[0].latest_version
   }
 }

@@ -390,3 +390,24 @@ variable "health_check_grace_period_seconds" {
   type        = number
   default     = 60
 }
+
+variable "enable_autoscaling" {
+  description = "Whether to enable autoscaling for the ECS service."
+  type        = bool
+  default     = true
+}
+
+variable "create_iam_instance_profile" {
+  description = "Whether to create an IAM instance profile for the ECS service."
+  type        = bool
+  default     = true
+}
+
+variable "ec2_configuration" {
+  description = "EC2 configuration."
+  type = object({
+    instance_type = string
+    user_data     = string
+  })
+  default = null
+}
