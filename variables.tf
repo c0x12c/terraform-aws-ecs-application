@@ -408,6 +408,9 @@ variable "ec2_configuration" {
   type = object({
     instance_type = string
     user_data     = string
+    privileged    = bool
+    shared_memory_size = number
+    init_process_enabled = true
   })
   default = null
 }
