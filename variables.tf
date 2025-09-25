@@ -410,7 +410,7 @@ variable "ec2_configuration" {
     user_data     = string
     privileged    = bool
     shared_memory_size = number
-    init_process_enabled = true
+    init_process_enabled = bool
   })
   default = null
 }
