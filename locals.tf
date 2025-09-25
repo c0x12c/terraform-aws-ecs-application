@@ -47,6 +47,13 @@ locals {
       name      = "${var.name}-container"
       image     = var.container_image
       essential = true
+      privileged = var.launch_type == "EC2" ? var.ec2_configuration.privileged : null
+      
+      linuxParameters = var.launch_type == "EC2" ? null : {
+        sharedMemorySize = var.ec2_configuration.shared_memory_size
+        initProcessEnabled = var.ec2_configuration.init_process_enabled
+      }
+
       user      = var.user
       cpu       = var.container_cpu
       memory    = var.container_memory
