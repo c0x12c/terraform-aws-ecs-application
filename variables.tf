@@ -406,10 +406,10 @@ variable "create_iam_instance_profile" {
 variable "ec2_configuration" {
   description = "EC2 configuration."
   type = object({
-    instance_type = string
-    user_data     = string
-    privileged    = bool
-    shared_memory_size = number
+    instance_type        = string
+    user_data            = string
+    privileged           = bool
+    shared_memory_size   = number
     init_process_enabled = bool
   })
   default = null

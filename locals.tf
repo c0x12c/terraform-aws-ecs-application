@@ -44,19 +44,19 @@ locals {
 
   service_container_definition = [
     {
-      name      = "${var.name}-container"
-      image     = var.container_image
-      essential = true
+      name       = "${var.name}-container"
+      image      = var.container_image
+      essential  = true
       privileged = var.launch_type == "EC2" ? var.ec2_configuration.privileged : null
-      
+
       linuxParameters = var.launch_type == "EC2" ? null : {
-        sharedMemorySize = var.ec2_configuration != null ? var.ec2_configuration.shared_memory_size : null
+        sharedMemorySize   = var.ec2_configuration != null ? var.ec2_configuration.shared_memory_size : null
         initProcessEnabled = var.ec2_configuration != null ? var.ec2_configuration.init_process_enabled : null
       }
 
-      user      = var.user
-      cpu       = var.container_cpu
-      memory    = var.container_memory
+      user   = var.user
+      cpu    = var.container_cpu
+      memory = var.container_memory
       mountPoints = var.persistent_volume != null ? [
         {
           sourceVolume  = var.name
