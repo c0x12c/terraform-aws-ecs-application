@@ -370,7 +370,7 @@ variable "launch_type" {
 variable "scheduling_strategy" {
   description = "Scheduling strategy to use for the service. The valid values are `REPLICA` and `DAEMON`. Defaults to `REPLICA`"
   type        = string
-  default     = null
+  default     = "REPLICA"
 }
 
 variable "deployment_minimum_healthy_percent" {
@@ -412,5 +412,11 @@ variable "ec2_configuration" {
     shared_memory_size   = number
     init_process_enabled = bool
   })
-  default = null
+  default = {
+    instance_type        = "t3.medium"
+    user_data            = null
+    privileged           = false
+    shared_memory_size   = null
+    init_process_enabled = null
+  }
 }

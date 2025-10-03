@@ -95,10 +95,12 @@ data "aws_iam_policy_document" "ecs_task_role_execute_command_ssm_message" {
   statement {
     sid    = "ExecutionSSM"
     effect = "Allow"
-    actions = ["ssmmessages:CreateControlChannel",
+    actions = [
+      "ssmmessages:CreateControlChannel",
       "ssmmessages:CreateDataChannel",
       "ssmmessages:OpenControlChannel",
-    "ssmmessages:OpenDataChannel"]
+      "ssmmessages:OpenDataChannel"
+    ]
     resources = ["*"]
   }
 }
