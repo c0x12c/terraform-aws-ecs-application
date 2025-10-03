@@ -1,6 +1,15 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## [1.2.0]() (2025-10-01)
+
+### Features
+
+* Introduces new variables:
+  * `launch_type`: to define launch type `FARGATE` or `EC2`.
+  * `scheduling_strategy`, `deployment_minimum_healthy_percent`, `deployment_maximum_percent` and `health_check_grace_period_seconds` to customize those attributes instead of using hardcode value.
+  * `enable_autoscaling` to enable autoscaling for ECS which was set default to true, however in `EC2` mode, this one are not required.
+  * `ec2_configuration` for customize `EC2` relating fields.
 
 ## [1.1.0]() (2025-08-19)
 

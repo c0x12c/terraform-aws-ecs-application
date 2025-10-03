@@ -353,3 +353,70 @@ variable "service_discovery_service_arn" {
   type        = string
   default     = null
 }
+
+variable "enable_execute_command" {
+  description = "Whether to enable execute command for the ECS task."
+  type        = bool
+  default     = false
+}
+
+variable "launch_type" {
+  description = "Launch type on which to run your service. The valid values are `EC2`, `FARGATE`, and `EXTERNAL`. Defaults to `FARGATE`"
+  type        = string
+  default     = "FARGATE"
+  nullable    = false
+}
+
+variable "scheduling_strategy" {
+  description = "Scheduling strategy to use for the service. The valid values are `REPLICA` and `DAEMON`. Defaults to `REPLICA`"
+  type        = string
+  default     = "REPLICA"
+}
+
+variable "deployment_minimum_healthy_percent" {
+  description = "Lower limit (as a percentage of the service's `desired_count`) of the number of running tasks that must remain running and healthy in a service during a deployment"
+  type        = number
+  default     = 50
+}
+
+variable "deployment_maximum_percent" {
+  description = "Upper limit (as a percentage of the service's `desired_count`) of the number of running tasks that can be running in a service during a deployment"
+  type        = number
+  default     = 200
+}
+
+variable "health_check_grace_period_seconds" {
+  description = "Seconds to ignore failing load balancer health checks on newly instantiated tasks to prevent premature shutdown, up to 2147483647. Only valid for services configured to use load balancers"
+  type        = number
+  default     = 60
+}
+
+variable "enable_autoscaling" {
+  description = "Whether to enable autoscaling for the ECS service."
+  type        = bool
+  default     = true
+}
+
+variable "create_iam_instance_profile" {
+  description = "Whether to create an IAM instance profile for the ECS service."
+  type        = bool
+  default     = false
+}
+
+variable "ec2_configuration" {
+  description = "EC2 configuration."
+  type = object({
+    instance_type        = string
+    user_data            = string
+    privileged           = bool
+    shared_memory_size   = number
+    init_process_enabled = bool
+  })
+  default = {
+    instance_type        = "t3.medium"
+    user_data            = null
+    privileged           = false
+    shared_memory_size   = null
+    init_process_enabled = null
+  }
+}

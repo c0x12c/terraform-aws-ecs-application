@@ -1,6 +1,8 @@
 locals {
   cloudwatch_log_group_name = var.cloudwatch_log_group_name != null ? var.cloudwatch_log_group_name : "${var.name}-task"
 
+  is_fargate = var.launch_type == "FARGATE" ? true : false
+
   log_configuration = {
     logDriver = "awslogs"
     options = {
@@ -42,12 +44,19 @@ locals {
 
   service_container_definition = [
     {
-      name      = "${var.name}-container"
-      image     = var.container_image
-      essential = true
-      user      = var.user
-      cpu       = var.container_cpu
-      memory    = var.container_memory
+      name       = "${var.name}-container"
+      image      = var.container_image
+      essential  = true
+      privileged = var.launch_type == "EC2" ? var.ec2_configuration.privileged : null
+
+      linuxParameters = var.launch_type == "EC2" ? null : {
+        sharedMemorySize   = var.ec2_configuration != null ? var.ec2_configuration.shared_memory_size : null
+        initProcessEnabled = var.ec2_configuration != null ? var.ec2_configuration.init_process_enabled : null
+      }
+
+      user   = var.user
+      cpu    = var.container_cpu
+      memory = var.container_memory
       mountPoints = var.persistent_volume != null ? [
         {
           sourceVolume  = var.name
