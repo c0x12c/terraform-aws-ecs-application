@@ -185,6 +185,34 @@ variable "use_alb" {
   default     = true
 }
 
+variable "load_balancer_configurations" {
+  description = "List of load balancer configurations for the ECS service."
+  type = list(object({
+    container_name   = optional(string, null) # Defaults to "${var.name}-container" if null
+    container_port   = number
+    target_group_arn = optional(string, null) # If null, a new target group will be created
+
+    # Target Group Configuration (only used if target_group_arn is null)
+    target_group_name                = optional(string, null) # Defaults to "${var.name}-tg-${index}" if null
+    target_group_protocol            = optional(string, "HTTP")
+    target_group_port                = optional(number, null) # Defaults to container_port if null
+    health_check_enabled             = optional(bool, true)
+    health_check_path                = optional(string, "/health")
+    health_check_healthy_threshold   = optional(number, 2)
+    health_check_unhealthy_threshold = optional(number, 7)
+    health_check_timeout             = optional(number, 60)
+    health_check_interval            = optional(number, 120)
+    health_check_matcher             = optional(string, "200")
+
+    # Listener Rule Configuration
+    create_listener_rule     = optional(bool, true)
+    listener_arn             = optional(string, null) # Defaults to var.aws_lb_listener_arn
+    listener_rule_priority   = optional(number, null) # Required if create_listener_rule is true
+    listener_rule_host_value = optional(string, null) # Defaults to route53 record fqdn if null
+  }))
+  default = []
+}
+
 variable "container_command" {
   description = "Container command."
   type        = list(string)

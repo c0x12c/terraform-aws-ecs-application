@@ -3,6 +3,35 @@ locals {
 
   is_fargate = var.launch_type == "FARGATE" ? true : false
 
+  # Compute load balancer configurations
+  # Support backward compatibility with use_alb variable
+  load_balancer_configs = length(var.load_balancer_configurations) > 0 ? var.load_balancer_configurations : (
+    var.use_alb == true ? [{
+      container_name               = null
+      container_port               = var.container_port
+      target_group_arn             = null
+      target_group_name            = null
+      target_group_protocol        = "HTTP"
+      target_group_port            = null
+      health_check_enabled         = var.health_check_enabled
+      health_check_path            = var.health_check_path
+      health_check_healthy_threshold   = 2
+      health_check_unhealthy_threshold = 7
+      health_check_timeout             = 60
+      health_check_interval            = 120
+      health_check_matcher             = "200"
+      create_listener_rule         = true
+      listener_arn                 = null
+      listener_rule_priority       = var.aws_lb_listener_rule_priority
+      listener_rule_host_value     = null
+    }] : []
+  )
+
+  # Create a map with index for easier reference
+  load_balancer_configs_map = {
+    for index, config in local.load_balancer_configs : index => config
+  }
+
   log_configuration = {
     logDriver = "awslogs"
     options = {

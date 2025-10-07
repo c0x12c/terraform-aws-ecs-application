@@ -46,12 +46,12 @@ resource "aws_ecs_service" "this" {
   }
 
   dynamic "load_balancer" {
-    for_each = var.use_alb ? [1] : []
+    for_each = local.load_balancer_configs_map
 
     content {
-      container_name   = "${var.name}-container"
-      container_port   = var.container_port
-      target_group_arn = try(aws_lb_target_group.this[0].arn, null)
+      container_name   = load_balancer.value.container_name != null ? load_balancer.value.container_name : "${var.name}-container"
+      container_port   = load_balancer.value.container_port
+      target_group_arn = load_balancer.value.target_group_arn != null ? load_balancer.value.target_group_arn : aws_lb_target_group.this[load_balancer.key].arn
     }
   }
 
