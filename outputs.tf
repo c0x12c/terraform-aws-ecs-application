@@ -4,8 +4,15 @@ output "alb_target_group_arn" {
 }
 
 output "application_domain_name" {
-  description = "The domain name of ECS application"
+  description = "The domain name of ECS application (backward compatibility)"
   value       = try(aws_route53_record.this[0].fqdn, null)
+}
+
+output "load_balancer_domain_names" {
+  description = "Map of all load balancer domain names"
+  value = {
+    for k, v in aws_route53_record.load_balancer : k => v.fqdn
+  }
 }
 
 output "ecs_service_name" {
