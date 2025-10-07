@@ -48,7 +48,7 @@ resource "aws_lb_listener_rule" "this" {
 
   condition {
     host_header {
-      values = [each.value.listener_rule_host_value != null ? each.value.listener_rule_host_value : try(aws_route53_record.load_balancer[each.key].fqdn, aws_route53_record.this[0].fqdn, "")]
+      values = [each.value.listener_rule_host_value != null ? each.value.listener_rule_host_value : try(aws_route53_record.this[0].fqdn, "")]
     }
   }
 
