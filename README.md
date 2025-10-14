@@ -96,13 +96,14 @@ module "application" {
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 5.75 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 6.16.0 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_efs"></a> [efs](#module\_efs) | c0x12c/efs/aws | ~> 0.1.78 |
+| <a name="module_eventbridge-slack-notification"></a> [eventbridge-slack-notification](#module\_eventbridge-slack-notification) | c0x12c/eventbridge-slack-notification/aws | ~> 1.1.0 |
 
 ## Resources
 
@@ -118,6 +119,7 @@ module "application" {
 | [aws_ecs_task_definition.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ecs_task_definition) | resource |
 | [aws_iam_instance_profile.this](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_instance_profile) | resource |
 | [aws_iam_policy.ecs_task_role_execute_command_ssm_message](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
+| [aws_iam_policy.lambda_ecs_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_policy.secrets](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_policy.ssm](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy) | resource |
 | [aws_iam_role.task_execution_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
@@ -177,13 +179,14 @@ module "application" {
 | <a name="input_deployment_maximum_percent"></a> [deployment\_maximum\_percent](#input\_deployment\_maximum\_percent) | Upper limit (as a percentage of the service's `desired_count`) of the number of running tasks that can be running in a service during a deployment | `number` | `200` | no |
 | <a name="input_deployment_minimum_healthy_percent"></a> [deployment\_minimum\_healthy\_percent](#input\_deployment\_minimum\_healthy\_percent) | Lower limit (as a percentage of the service's `desired_count`) of the number of running tasks that must remain running and healthy in a service during a deployment | `number` | `50` | no |
 | <a name="input_dns_name"></a> [dns\_name](#input\_dns\_name) | DNS name for the ECS application | `string` | n/a | yes |
-| <a name="input_ec2_configuration"></a> [ec2\_configuration](#input\_ec2\_configuration) | EC2 configuration. | <pre>object({<br/>    instance_type        = string<br/>    user_data            = string<br/>    privileged           = bool<br/>    shared_memory_size   = number<br/>    init_process_enabled = bool<br/>  })</pre> | `null` | no |
+| <a name="input_ec2_configuration"></a> [ec2\_configuration](#input\_ec2\_configuration) | EC2 configuration. | <pre>object({<br/>    instance_type        = string<br/>    user_data            = string<br/>    privileged           = bool<br/>    shared_memory_size   = number<br/>    init_process_enabled = bool<br/>  })</pre> | <pre>{<br/>  "init_process_enabled": null,<br/>  "instance_type": "t3.medium",<br/>  "privileged": false,<br/>  "shared_memory_size": null,<br/>  "user_data": null<br/>}</pre> | no |
 | <a name="input_ecs_cluster_id"></a> [ecs\_cluster\_id](#input\_ecs\_cluster\_id) | ID of the ECS cluster for this ECS application | `string` | n/a | yes |
 | <a name="input_ecs_cluster_name"></a> [ecs\_cluster\_name](#input\_ecs\_cluster\_name) | Name of the ECS cluster for this ECS application | `string` | n/a | yes |
 | <a name="input_ecs_execution_policy_arns"></a> [ecs\_execution\_policy\_arns](#input\_ecs\_execution\_policy\_arns) | Permission to make AWS API calls | `list(string)` | n/a | yes |
 | <a name="input_enable_autoscaling"></a> [enable\_autoscaling](#input\_enable\_autoscaling) | Whether to enable autoscaling for the ECS service. | `bool` | `true` | no |
 | <a name="input_enable_execute_command"></a> [enable\_execute\_command](#input\_enable\_execute\_command) | Whether to enable execute command for the ECS task. | `bool` | `false` | no |
 | <a name="input_enabled_datadog_sidecar"></a> [enabled\_datadog\_sidecar](#input\_enabled\_datadog\_sidecar) | Whether to use Datadog sidecar for monitoring and logging. | `bool` | `false` | no |
+| <a name="input_enabled_notification"></a> [enabled\_notification](#input\_enabled\_notification) | Whether to enable ECS service and task event notifications. | `bool` | `false` | no |
 | <a name="input_enabled_port_mapping"></a> [enabled\_port\_mapping](#input\_enabled\_port\_mapping) | Whether to use TCP port mapping to service container. | `bool` | `true` | no |
 | <a name="input_enabled_service_connect"></a> [enabled\_service\_connect](#input\_enabled\_service\_connect) | Whether to create service connect namespace for service internal discovery. | `bool` | `false` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | The environment name | `string` | `"dev"` | no |
@@ -193,18 +196,22 @@ module "application" {
 | <a name="input_health_check_path"></a> [health\_check\_path](#input\_health\_check\_path) | Default path for health check requests | `string` | `"/health"` | no |
 | <a name="input_launch_type"></a> [launch\_type](#input\_launch\_type) | Launch type on which to run your service. The valid values are `EC2`, `FARGATE`, and `EXTERNAL`. Defaults to `FARGATE` | `string` | `"FARGATE"` | no |
 | <a name="input_name"></a> [name](#input\_name) | The name ECS application | `string` | n/a | yes |
+| <a name="input_notification_deployment_event_types"></a> [notification\_deployment\_event\_types](#input\_notification\_deployment\_event\_types) | List of ECS deployments event types | `list(string)` | <pre>[<br/>  "SERVICE_DEPLOYMENT_IN_PROGRESS",<br/>  "SERVICE_DEPLOYMENT_COMPLETED",<br/>  "SERVICE_DEPLOYMENT_FAILED"<br/>]</pre> | no |
+| <a name="input_notification_service_event_types"></a> [notification\_service\_event\_types](#input\_notification\_service\_event\_types) | List of ECS service event types to trigger notifications. Empty by default as deployments are tracked separately. Can include: SERVICE\_TASK\_PLACEMENT\_FAILURE, SERVICE\_STEADY\_STATE | `list(string)` | <pre>[<br/>  "SERVICE_TASK_PLACEMENT_FAILURE",<br/>  "SERVICE_STEADY_STATE"<br/>]</pre> | no |
+| <a name="input_notification_task_stop_codes"></a> [notification\_task\_stop\_codes](#input\_notification\_task\_stop\_codes) | List of ECS task stop codes to trigger notifications for STOPPED tasks. Filters for critical failures only. | `list(string)` | <pre>[<br/>  "TaskFailedToStart",<br/>  "EssentialContainerExited",<br/>  "ContainerFailedToStart"<br/>]</pre> | no |
 | <a name="input_overwrite_task_execution_role_name"></a> [overwrite\_task\_execution\_role\_name](#input\_overwrite\_task\_execution\_role\_name) | Overwrite ECS task execution role name. | `string` | `null` | no |
 | <a name="input_overwrite_task_role_name"></a> [overwrite\_task\_role\_name](#input\_overwrite\_task\_role\_name) | Overwrite ECS task role name. | `string` | `null` | no |
 | <a name="input_persistent_volume"></a> [persistent\_volume](#input\_persistent\_volume) | Directory path for the EFS volume | <pre>object({<br/>    path = string,<br/>    gid  = optional(number, 1000)<br/>    uid  = optional(number, 1000)<br/>  })</pre> | `null` | no |
 | <a name="input_port_mapping_name"></a> [port\_mapping\_name](#input\_port\_mapping\_name) | Container port mapping name for service connect. | `string` | `"main"` | no |
 | <a name="input_region"></a> [region](#input\_region) | The AWS region in which resources are created | `string` | n/a | yes |
 | <a name="input_route53_zone_id"></a> [route53\_zone\_id](#input\_route53\_zone\_id) | R53 zone ID | `string` | n/a | yes |
-| <a name="input_scheduling_strategy"></a> [scheduling\_strategy](#input\_scheduling\_strategy) | Scheduling strategy to use for the service. The valid values are `REPLICA` and `DAEMON`. Defaults to `REPLICA` | `string` | `null` | no |
+| <a name="input_scheduling_strategy"></a> [scheduling\_strategy](#input\_scheduling\_strategy) | Scheduling strategy to use for the service. The valid values are `REPLICA` and `DAEMON`. Defaults to `REPLICA` | `string` | `"REPLICA"` | no |
 | <a name="input_security_group_ids"></a> [security\_group\_ids](#input\_security\_group\_ids) | List of security groups to associate with the task or service | `list(string)` | `[]` | no |
 | <a name="input_service_connect_configuration"></a> [service\_connect\_configuration](#input\_service\_connect\_configuration) | Service connect configuration within namespace. | <pre>object({<br/>    namespace = string<br/>    service = optional(object({<br/>      discovery_name = string<br/>      port_name      = string<br/>      client_alias = object({<br/>        dns_name = string<br/>        port     = number<br/>      })<br/>    }), null)<br/>  })</pre> | <pre>{<br/>  "namespace": null,<br/>  "service": null<br/>}</pre> | no |
 | <a name="input_service_desired_count"></a> [service\_desired\_count](#input\_service\_desired\_count) | Number of services running in parallel | `number` | `2` | no |
 | <a name="input_service_discovery_service_arn"></a> [service\_discovery\_service\_arn](#input\_service\_discovery\_service\_arn) | Service discovery service arn. | `string` | `null` | no |
 | <a name="input_service_max_capacity"></a> [service\_max\_capacity](#input\_service\_max\_capacity) | Maximum of services running in parallel | `number` | `2` | no |
+| <a name="input_slack_webhook_url"></a> [slack\_webhook\_url](#input\_slack\_webhook\_url) | Slack webhook URL for sending notifications. | `string` | `null` | no |
 | <a name="input_subnet_ids"></a> [subnet\_ids](#input\_subnet\_ids) | List of subnets to associate with the task or service | `list(string)` | `[]` | no |
 | <a name="input_task_cpu"></a> [task\_cpu](#input\_task\_cpu) | Task cpu. | `number` | n/a | yes |
 | <a name="input_task_memory"></a> [task\_memory](#input\_task\_memory) | Task memory. | `number` | n/a | yes |

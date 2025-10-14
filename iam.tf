@@ -160,3 +160,25 @@ resource "aws_iam_instance_profile" "this" {
 
   name = "ec2-ecs-instance-profile"
 }
+
+resource "aws_iam_policy" "lambda_ecs_policy" {
+  count       = var.enabled_notification ? 1 : 0
+  name        = "${var.name}-lambda-ecs-policy"
+  description = "IAM policy for Lambda function to access ECS service and task details"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action = [
+          "ecs:DescribeServices",
+          "ecs:DescribeTasks",
+          "ecs:DescribeTaskDefinition",
+          "ecs:ListTasks"
+        ],
+        Effect   = "Allow",
+        Resource = "*"
+      }
+    ]
+  })
+}
