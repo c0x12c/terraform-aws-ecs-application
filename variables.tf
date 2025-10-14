@@ -420,3 +420,39 @@ variable "ec2_configuration" {
     init_process_enabled = null
   }
 }
+
+# notification
+variable "enabled_notification" {
+  description = "Whether to enable ECS service and task event notifications."
+  type        = bool
+  default     = false
+}
+
+variable "slack_webhook_url" {
+  description = "Slack webhook URL for sending notifications."
+  type        = string
+  default     = null
+  sensitive   = true
+}
+
+variable "notification_deployment_event_types" {
+  description = "List of ECS deployments event types"
+  type        = list(string)
+  default = [
+    "SERVICE_DEPLOYMENT_IN_PROGRESS",
+    "SERVICE_DEPLOYMENT_COMPLETED",
+    "SERVICE_DEPLOYMENT_FAILED"
+  ]
+}
+
+variable "notification_service_event_types" {
+  description = "List of ECS service event types to trigger notifications. Empty by default as deployments are tracked separately. Can include: SERVICE_TASK_PLACEMENT_FAILURE, SERVICE_STEADY_STATE"
+  type        = list(string)
+  default     = ["SERVICE_TASK_PLACEMENT_FAILURE", "SERVICE_STEADY_STATE"]
+}
+
+variable "notification_task_stop_codes" {
+  description = "List of ECS task stop codes to trigger notifications for STOPPED tasks. Filters for critical failures only."
+  type        = list(string)
+  default     = ["TaskFailedToStart", "EssentialContainerExited", "ContainerFailedToStart"]
+}

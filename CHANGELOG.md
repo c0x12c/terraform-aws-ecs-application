@@ -1,6 +1,21 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## [1.2.1]() (2025-10-14)
+
+### Features
+
+* Add ECS event notification support via EventBridge and Slack integration:
+  * Introduces new variables:
+    * `enabled_notification`: to enable/disable ECS event notifications.
+    * `slack_webhook_url`: webhook URL for Slack notifications.
+    * `notification_deployment_event_types`: list of deployment event types to monitor.
+    * `notification_service_event_types`: list of service event types to monitor.
+    * `notification_task_stop_codes`: list of ECS task stop codes to trigger notifications for STOPPED tasks.
+  * Lambda function for processing ECS events and sending formatted Slack notifications with rich formatting (color-coded severity, AWS Console links, container exit information).
+  * Conditional module creation - notification infrastructure only created when `enabled_notification = true`.
+  * EventBridge rules for monitoring deployment, service, and task events.
+
 ## [1.2.0]() (2025-10-01)
 
 ### Features
