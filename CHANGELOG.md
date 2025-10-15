@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.4]() (2025-10-16)
+
+### Bug Fixes
+
+* Use consistent prefix-based resource filtering for all EventBridge event patterns:
+  * Convert deployment and service event rules to use `prefix` format for resources field.
+  * Add resource prefix filtering for task state change events using cluster-based task ARN pattern.
+
 ## [1.2.3]() (2025-10-16)
 
 ### Bug Fixes
