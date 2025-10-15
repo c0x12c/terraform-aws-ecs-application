@@ -29,6 +29,7 @@ module "eventbridge-slack-notification" {
       event_pattern = {
         source      = ["aws.ecs"]
         detail-type = ["ECS Deployment State Change"]
+        resources   = [aws_ecs_service.this.id]
         detail = {
           eventName  = var.notification_deployment_event_types
           clusterArn = [var.ecs_cluster_id]

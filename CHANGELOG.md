@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.3]() (2025-10-16)
+
+### Bug Fixes
+
+* Improve EventBridge deployment event filtering:
+  * Add `resources` filter with ECS service ID to deployment state change event pattern.
+
 ## [1.2.2]() (2025-10-15)
 
 ### Bug Fixes
