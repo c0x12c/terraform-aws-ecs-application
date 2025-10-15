@@ -1,6 +1,15 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+
+## [1.2.2]() (2025-10-15)
+
+### Bug Fixes
+
+* Fix ECS task event filtering in EventBridge rule:
+  * Replace `serviceName` with `groupName` pattern `service:${var.name}` to correctly match ECS task events.
+  * This fixes the notification filtering for STOPPED tasks which use `groupName` instead of `serviceName` in their event structure.
+
 ## [1.2.1]() (2025-10-14)
 
 ### Features

@@ -54,10 +54,10 @@ module "eventbridge-slack-notification" {
         source      = ["aws.ecs"]
         detail-type = ["ECS Task State Change"]
         detail = {
-          lastStatus  = ["STOPPED"]
-          stopCode    = var.notification_task_stop_codes
-          clusterArn  = [var.ecs_cluster_id]
-          serviceName = [var.name]
+          lastStatus = ["STOPPED"]
+          stopCode   = var.notification_task_stop_codes
+          clusterArn = [var.ecs_cluster_id]
+          groupName  = ["service:${var.name}"]
         }
       }
     }
