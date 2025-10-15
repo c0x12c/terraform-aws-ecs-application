@@ -29,7 +29,11 @@ module "eventbridge-slack-notification" {
       event_pattern = {
         source      = ["aws.ecs"]
         detail-type = ["ECS Deployment State Change"]
-        resources   = [aws_ecs_service.this.id]
+        resources = [
+          {
+            prefix = aws_ecs_service.this.id
+          }
+        ]
         detail = {
           eventName  = var.notification_deployment_event_types
           clusterArn = [var.ecs_cluster_id]
@@ -42,6 +46,11 @@ module "eventbridge-slack-notification" {
       event_pattern = {
         source      = ["aws.ecs"]
         detail-type = ["ECS Service Action"]
+        resources = [
+          {
+            prefix = aws_ecs_service.this.id
+          }
+        ]
         detail = {
           eventType  = var.notification_service_event_types
           clusterArn = [var.ecs_cluster_id]
@@ -54,6 +63,11 @@ module "eventbridge-slack-notification" {
       event_pattern = {
         source      = ["aws.ecs"]
         detail-type = ["ECS Task State Change"]
+        resources = [
+          {
+            prefix = "${replace(var.ecs_cluster_id, ":cluster/", ":task/")}/"
+          }
+        ]
         detail = {
           lastStatus = ["STOPPED"]
           stopCode   = var.notification_task_stop_codes
