@@ -72,7 +72,7 @@ module "eventbridge-slack-notification" {
           lastStatus = ["STOPPED"]
           stopCode   = var.notification_task_stop_codes
           clusterArn = [var.ecs_cluster_id]
-          groupName  = ["service:${var.name}"]
+          group      = ["service:${var.name}"]
         }
       }
     }

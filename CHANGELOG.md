@@ -2,9 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [1.2.4]() (2025-10-16)
+## [1.2.5]() (2025-10-18)
 
 ### Bug Fixes
+
+* Fix ECS task event filtering field name in EventBridge rule:
+  * Correct event pattern field from `groupName` to `group` for task state change events.
+  * This aligns with the correct AWS EventBridge event structure for ECS task events.
+
+## [1.2.4]() (2025-10-16)
 
 * Use consistent prefix-based resource filtering for all EventBridge event patterns:
   * Convert deployment and service event rules to use `prefix` format for resources field.
