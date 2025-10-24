@@ -175,6 +175,7 @@ module "application" {
 | <a name="input_dd_agent_image"></a> [dd\_agent\_image](#input\_dd\_agent\_image) | Datadog agent image. | `string` | `"public.ecr.aws/datadog/agent:latest"` | no |
 | <a name="input_dd_api_key_arn"></a> [dd\_api\_key\_arn](#input\_dd\_api\_key\_arn) | n/a | `string` | `null` | no |
 | <a name="input_dd_port"></a> [dd\_port](#input\_dd\_port) | Datadog agent port. | `number` | `8126` | no |
+| <a name="input_dd_sidecar_environment"></a> [dd\_sidecar\_environment](#input\_dd\_sidecar\_environment) | Additional environment variables for the Datadog sidecar container | <pre>list(object({<br/>    name  = string<br/>    value = string<br/>  }))</pre> | `[]` | no |
 | <a name="input_dd_site"></a> [dd\_site](#input\_dd\_site) | n/a | `string` | `null` | no |
 | <a name="input_deployment_maximum_percent"></a> [deployment\_maximum\_percent](#input\_deployment\_maximum\_percent) | Upper limit (as a percentage of the service's `desired_count`) of the number of running tasks that can be running in a service during a deployment | `number` | `200` | no |
 | <a name="input_deployment_minimum_healthy_percent"></a> [deployment\_minimum\_healthy\_percent](#input\_deployment\_minimum\_healthy\_percent) | Lower limit (as a percentage of the service's `desired_count`) of the number of running tasks that must remain running and healthy in a service during a deployment | `number` | `50` | no |

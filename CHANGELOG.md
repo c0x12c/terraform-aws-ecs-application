@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.6]() (2025-10-25)
+
+### Features
+
+* Add support for custom Datadog sidecar environment variables:
+  * Introduces new variable `dd_sidecar_environment` to pass additional environment variables to the Datadog sidecar container.
+  * Allows customization of Datadog agent configuration while preserving default settings.
+
 ## [1.2.5]() (2025-10-18)
 
 ### Bug Fixes

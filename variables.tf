@@ -316,6 +316,15 @@ variable "dd_port" {
   default     = 8126
 }
 
+variable "dd_sidecar_environment" {
+  description = "Additional environment variables for the Datadog sidecar container"
+  type = list(object({
+    name  = string
+    value = string
+  }))
+  default = []
+}
+
 # service connect
 variable "port_mapping_name" {
   description = "Container port mapping name for service connect."

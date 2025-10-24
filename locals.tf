@@ -147,36 +147,44 @@ locals {
       mountPoints = []
       volumesFrom = []
 
-      environment = [
+      environment = concat([
         {
-          "name" : "DD_APM_ENABLED",
-          "value" : "true"
+          name : "DD_APM_ENABLED",
+          value : true
         },
         {
-          "name" : "DD_APM_NON_LOCAL_TRAFFIC",
-          "value" : "true"
+          name : "DD_APM_NON_LOCAL_TRAFFIC",
+          value : true
         },
         {
-          "name" : "DD_ENV",
-          "value" : var.environment
+          name : "DD_ENV",
+          value : var.environment
         },
         {
-          "name" : "DD_LOG_LEVEL",
-          "value" : "warn"
+          name : "DD_LOGS_INJECTION",
+          value : true
         },
         {
-          "name" : "DD_PROCESS_AGENT_ENABLED",
-          "value" : "true"
+          name : "DD_LOG_LEVEL",
+          value : "warn"
         },
         {
-          "name" : "DD_SITE",
-          "value" : var.dd_site
+          name : "DD_PROCESS_AGENT_ENABLED",
+          value : "true"
         },
         {
-          "name" : "ECS_FARGATE",
-          "value" : "true"
+          name : "DD_SITE",
+          value : var.dd_site
+        },
+        {
+          name : "DD_TRACE_ENABLED",
+          value : true
+        },
+        {
+          name : "ECS_FARGATE",
+          value : true
         }
-      ]
+      ], var.dd_sidecar_environment)
 
       portMappings = [
         {
