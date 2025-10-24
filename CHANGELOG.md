@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.7]() (2025-10-25)
+
+### Bug Fixes
+
+* Fix Datadog sidecar environment variable type error:
+  * Change boolean values to strings in Datadog container environment variables to fix error: `ECS Task Definition container_definitions is invalid: json: cannot unmarshal bool into Go struct field KeyValuePair.Environment.Value of type string`.
+  * All environment variable values must be strings as per ECS task definition requirements.
+
 ## [1.2.6]() (2025-10-25)
 
 ### Features

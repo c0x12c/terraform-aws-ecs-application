@@ -150,11 +150,11 @@ locals {
       environment = concat([
         {
           name : "DD_APM_ENABLED",
-          value : true
+          value : "true"
         },
         {
           name : "DD_APM_NON_LOCAL_TRAFFIC",
-          value : true
+          value : "true"
         },
         {
           name : "DD_ENV",
@@ -162,7 +162,7 @@ locals {
         },
         {
           name : "DD_LOGS_INJECTION",
-          value : true
+          value : "true"
         },
         {
           name : "DD_LOG_LEVEL",
@@ -178,11 +178,11 @@ locals {
         },
         {
           name : "DD_TRACE_ENABLED",
-          value : true
+          value : "true"
         },
         {
           name : "ECS_FARGATE",
-          value : true
+          value : "true"
         }
       ], var.dd_sidecar_environment)
 
