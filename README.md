@@ -177,6 +177,7 @@ module "application" {
 | <a name="input_dd_port"></a> [dd\_port](#input\_dd\_port) | Datadog agent port. | `number` | `8126` | no |
 | <a name="input_dd_sidecar_environment"></a> [dd\_sidecar\_environment](#input\_dd\_sidecar\_environment) | Additional environment variables for the Datadog sidecar container | <pre>list(object({<br/>    name  = string<br/>    value = string<br/>  }))</pre> | `[]` | no |
 | <a name="input_dd_site"></a> [dd\_site](#input\_dd\_site) | n/a | `string` | `null` | no |
+| <a name="input_deployment_circuit_breaker_rollback"></a> [deployment\_circuit\_breaker\_rollback](#input\_deployment\_circuit\_breaker\_rollback) | Whether to enable automatic rollback when the circuit breaker triggers. Only takes effect if enable\_deployment\_circuit\_breaker is true. | `bool` | `false` | no |
 | <a name="input_deployment_maximum_percent"></a> [deployment\_maximum\_percent](#input\_deployment\_maximum\_percent) | Upper limit (as a percentage of the service's `desired_count`) of the number of running tasks that can be running in a service during a deployment | `number` | `200` | no |
 | <a name="input_deployment_minimum_healthy_percent"></a> [deployment\_minimum\_healthy\_percent](#input\_deployment\_minimum\_healthy\_percent) | Lower limit (as a percentage of the service's `desired_count`) of the number of running tasks that must remain running and healthy in a service during a deployment | `number` | `50` | no |
 | <a name="input_dns_name"></a> [dns\_name](#input\_dns\_name) | DNS name for the ECS application | `string` | n/a | yes |
@@ -185,6 +186,7 @@ module "application" {
 | <a name="input_ecs_cluster_name"></a> [ecs\_cluster\_name](#input\_ecs\_cluster\_name) | Name of the ECS cluster for this ECS application | `string` | n/a | yes |
 | <a name="input_ecs_execution_policy_arns"></a> [ecs\_execution\_policy\_arns](#input\_ecs\_execution\_policy\_arns) | Permission to make AWS API calls | `list(string)` | n/a | yes |
 | <a name="input_enable_autoscaling"></a> [enable\_autoscaling](#input\_enable\_autoscaling) | Whether to enable autoscaling for the ECS service. | `bool` | `true` | no |
+| <a name="input_enable_deployment_circuit_breaker"></a> [enable\_deployment\_circuit\_breaker](#input\_enable\_deployment\_circuit\_breaker) | Whether to enable the deployment circuit breaker logic for the service. If enabled, a service deployment will transition to a failed state and stop launching new tasks if it can't reach a steady state. | `bool` | `true` | no |
 | <a name="input_enable_execute_command"></a> [enable\_execute\_command](#input\_enable\_execute\_command) | Whether to enable execute command for the ECS task. | `bool` | `false` | no |
 | <a name="input_enabled_datadog_sidecar"></a> [enabled\_datadog\_sidecar](#input\_enabled\_datadog\_sidecar) | Whether to use Datadog sidecar for monitoring and logging. | `bool` | `false` | no |
 | <a name="input_enabled_notification"></a> [enabled\_notification](#input\_enabled\_notification) | Whether to enable ECS service and task event notifications. | `bool` | `false` | no |

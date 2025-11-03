@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.0]() (2025-11-03)
+
+### Features
+
+* Add deployment circuit breaker support:
+  * Introduces new variable `enable_deployment_circuit_breaker` (default: `true`) to enable automatic detection of failed deployments.
+  * Introduces new variable `deployment_circuit_breaker_rollback` (default: `false`) to enable automatic rollback when circuit breaker triggers.
+
 ## [1.2.7]() (2025-10-25)
 
 ### Bug Fixes

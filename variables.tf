@@ -465,3 +465,15 @@ variable "notification_task_stop_codes" {
   type        = list(string)
   default     = ["TaskFailedToStart", "EssentialContainerExited", "ContainerFailedToStart"]
 }
+
+variable "enable_deployment_circuit_breaker" {
+  description = "Whether to enable the deployment circuit breaker logic for the service. If enabled, a service deployment will transition to a failed state and stop launching new tasks if it can't reach a steady state."
+  type        = bool
+  default     = true
+}
+
+variable "deployment_circuit_breaker_rollback" {
+  description = "Whether to enable automatic rollback when the circuit breaker triggers. Only takes effect if enable_deployment_circuit_breaker is true."
+  type        = bool
+  default     = false
+}
