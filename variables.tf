@@ -48,6 +48,12 @@ variable "container_port" {
   type        = number
 }
 
+variable "container_protocol" {
+  description = "Protocol of container to be exposed"
+  type        = string
+  default     = "HTTP"
+}
+
 variable "container_cpu" {
   description = "The number of cpu units used by the task"
   type        = number
@@ -110,17 +116,6 @@ variable "ecs_cluster_name" {
   type        = string
 }
 
-variable "health_check_enabled" {
-  description = "Specify whether enabling health check for this ECS service or not"
-  type        = bool
-  default     = true
-}
-
-variable "health_check_path" {
-  description = "Default path for health check requests"
-  type        = string
-  default     = "/health"
-}
 
 variable "force_new_deployment" {
   description = "Enable to force a new task deployment of the service"
@@ -476,4 +471,30 @@ variable "deployment_circuit_breaker_rollback" {
   description = "Whether to enable automatic rollback when the circuit breaker triggers. Only takes effect if enable_deployment_circuit_breaker is true."
   type        = bool
   default     = false
+}
+
+variable "target_group_configuration" {
+  description = "Target group configuration."
+  type = object({
+    health_check_enabled             = optional(bool, true)
+    health_check_path                = optional(string, "/health")
+    health_check_protocol            = optional(string, "HTTP")
+    health_check_port                = optional(number, 8080)
+    health_check_interval            = optional(number, 120)
+    health_check_timeout             = optional(number, 60)
+    health_check_healthy_threshold   = optional(number, 2)
+    health_check_unhealthy_threshold = optional(number, 7)
+    health_check_matcher             = optional(string, "200")
+  })
+  default = {
+    health_check_enabled             = true
+    health_check_path                = "/health"
+    health_check_protocol            = "HTTP"
+    health_check_port                = 8080
+    health_check_interval            = 120
+    health_check_timeout             = 60
+    health_check_healthy_threshold   = 2
+    health_check_unhealthy_threshold = 7
+    health_check_matcher             = "200"
+  }
 }
