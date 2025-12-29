@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.1]() (2025-12-29)
+
+### Fix Bugs
+* Fix the condition for `health_check_matcher` and `health_check_enabled` for deprecation condition.
+
+
 ## [2.0.0]() (2025-12-29)
 
 ### BREAKING CHANGES 
