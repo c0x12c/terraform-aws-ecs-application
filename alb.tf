@@ -17,7 +17,7 @@ resource "aws_lb_target_group" "this" {
     interval            = var.target_group_configuration.health_check_interval
     protocol            = var.target_group_configuration.health_check_protocol
     port                = var.target_group_configuration.health_check_port
-    matcher             = var.target_group_configuration.health_check_matcher != null? var.target_group_configuration.health_check_matcher : var.health_check_path
+    matcher             = var.target_group_configuration.health_check_matcher != null ? var.target_group_configuration.health_check_matcher : var.health_check_path
     timeout             = var.target_group_configuration.health_check_timeout
     path                = var.target_group_configuration.health_check_path
     unhealthy_threshold = var.target_group_configuration.health_check_unhealthy_threshold
