@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
       health_check_matcher             = "200"
     }
     ```
+  * Although we add that new environment, but still keep the default one as the old version, with the same configuration.
 
 
 ## [1.3.0]() (2025-11-03)
