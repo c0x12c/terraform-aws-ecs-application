@@ -2,28 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
-## [1.4.0]() (2025-12-29)
+## [2.0.0]() (2025-12-29)
 
-### Features
+### BREAKING CHANGES 
 
-* Add deployment circuit breaker support:
-  * Introduces new variable `target_group_configuration`, to customize the target group health check and protocol. In some cases, we don't have any health check path for tasks or disable the TLS for container because those are public images. We have to customize our health check for support those cases such as `health_check_matcher = 200-404` to make sure that our pods alive but don't have any health check path, or adjust protocol to `HTTPS`.
-    default: 
-    ```
-    target_group_configuration = {
-      health_check_enabled             = true
-      health_check_path                = "/health"
-      health_check_protocol            = "HTTP"
-      health_check_port                = 8080
-      health_check_interval            = 120
-      health_check_timeout             = 60
-      health_check_healthy_threshold   = 2
-      health_check_unhealthy_threshold = 7
-      health_check_matcher             = "200"
-    }
-    ```
-  * Although we add that new environment, but still keep the default one as the old version, with the same configuration.
-
+* Introduces new variable `target_group_configuration`, to customize the target group health check and protocol. In some cases, we don't have any health check path for tasks or disable the TLS for container because those are public images. We have to customize our health check for support those cases such as `health_check_matcher = 200-404` to make sure that our pods alive but don't have any health check path, or adjust protocol to `HTTPS`.
+  default: 
+  ```
+  target_group_configuration = {
+    health_check_enabled             = true
+    health_check_path                = "/health"
+    health_check_protocol            = "HTTP"
+    health_check_port                = 8080
+    health_check_interval            = 120
+    health_check_timeout             = 60
+    health_check_healthy_threshold   = 2
+    health_check_unhealthy_threshold = 7
+    health_check_matcher             = "200"
+  }
+  ```
+* Although we add that new environment, but still keep the default one as the old version, with the same configuration.
 
 ## [1.3.0]() (2025-11-03)
 

@@ -116,7 +116,6 @@ variable "ecs_cluster_name" {
   type        = string
 }
 
-
 variable "force_new_deployment" {
   description = "Enable to force a new task deployment of the service"
   type        = bool
