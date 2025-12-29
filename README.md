@@ -96,7 +96,7 @@ module "application" {
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 6.16.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 6.27.0 |
 
 ## Modules
 
@@ -170,6 +170,7 @@ module "application" {
 | <a name="input_container_image"></a> [container\_image](#input\_container\_image) | Docker image to be launched | `string` | n/a | yes |
 | <a name="input_container_memory"></a> [container\_memory](#input\_container\_memory) | The amount (in MiB) of memory used by the task | `number` | `2048` | no |
 | <a name="input_container_port"></a> [container\_port](#input\_container\_port) | Port of container to be exposed | `number` | n/a | yes |
+| <a name="input_container_protocol"></a> [container\_protocol](#input\_container\_protocol) | Protocol of container to be exposed | `string` | `"HTTP"` | no |
 | <a name="input_container_secrets"></a> [container\_secrets](#input\_container\_secrets) | The container secret environment variables | <pre>list(object({<br/>    name      = string<br/>    valueFrom = string<br/>  }))</pre> | `[]` | no |
 | <a name="input_create_iam_instance_profile"></a> [create\_iam\_instance\_profile](#input\_create\_iam\_instance\_profile) | Whether to create an IAM instance profile for the ECS service. | `bool` | `false` | no |
 | <a name="input_dd_agent_image"></a> [dd\_agent\_image](#input\_dd\_agent\_image) | Datadog agent image. | `string` | `"public.ecr.aws/datadog/agent:latest"` | no |
@@ -194,9 +195,7 @@ module "application" {
 | <a name="input_enabled_service_connect"></a> [enabled\_service\_connect](#input\_enabled\_service\_connect) | Whether to create service connect namespace for service internal discovery. | `bool` | `false` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | The environment name | `string` | `"dev"` | no |
 | <a name="input_force_new_deployment"></a> [force\_new\_deployment](#input\_force\_new\_deployment) | Enable to force a new task deployment of the service | `bool` | `true` | no |
-| <a name="input_health_check_enabled"></a> [health\_check\_enabled](#input\_health\_check\_enabled) | Specify whether enabling health check for this ECS service or not | `bool` | `true` | no |
 | <a name="input_health_check_grace_period_seconds"></a> [health\_check\_grace\_period\_seconds](#input\_health\_check\_grace\_period\_seconds) | Seconds to ignore failing load balancer health checks on newly instantiated tasks to prevent premature shutdown, up to 2147483647. Only valid for services configured to use load balancers | `number` | `60` | no |
-| <a name="input_health_check_path"></a> [health\_check\_path](#input\_health\_check\_path) | Default path for health check requests | `string` | `"/health"` | no |
 | <a name="input_launch_type"></a> [launch\_type](#input\_launch\_type) | Launch type on which to run your service. The valid values are `EC2`, `FARGATE`, and `EXTERNAL`. Defaults to `FARGATE` | `string` | `"FARGATE"` | no |
 | <a name="input_name"></a> [name](#input\_name) | The name ECS application | `string` | n/a | yes |
 | <a name="input_notification_deployment_event_types"></a> [notification\_deployment\_event\_types](#input\_notification\_deployment\_event\_types) | List of ECS deployments event types | `list(string)` | <pre>[<br/>  "SERVICE_DEPLOYMENT_IN_PROGRESS",<br/>  "SERVICE_DEPLOYMENT_COMPLETED",<br/>  "SERVICE_DEPLOYMENT_FAILED"<br/>]</pre> | no |
@@ -216,6 +215,7 @@ module "application" {
 | <a name="input_service_max_capacity"></a> [service\_max\_capacity](#input\_service\_max\_capacity) | Maximum of services running in parallel | `number` | `2` | no |
 | <a name="input_slack_webhook_url"></a> [slack\_webhook\_url](#input\_slack\_webhook\_url) | Slack webhook URL for sending notifications. | `string` | `null` | no |
 | <a name="input_subnet_ids"></a> [subnet\_ids](#input\_subnet\_ids) | List of subnets to associate with the task or service | `list(string)` | `[]` | no |
+| <a name="input_target_group_configuration"></a> [target\_group\_configuration](#input\_target\_group\_configuration) | Target group configuration. | <pre>object({<br/>    health_check_enabled             = optional(bool, true)<br/>    health_check_path                = optional(string, "/health")<br/>    health_check_protocol            = optional(string, "HTTP")<br/>    health_check_port                = optional(number, 8080)<br/>    health_check_interval            = optional(number, 120)<br/>    health_check_timeout             = optional(number, 60)<br/>    health_check_healthy_threshold   = optional(number, 2)<br/>    health_check_unhealthy_threshold = optional(number, 7)<br/>    health_check_matcher             = optional(string, "200")<br/>  })</pre> | <pre>{<br/>  "health_check_enabled": true,<br/>  "health_check_healthy_threshold": 2,<br/>  "health_check_interval": 120,<br/>  "health_check_matcher": "200",<br/>  "health_check_path": "/health",<br/>  "health_check_port": 8080,<br/>  "health_check_protocol": "HTTP",<br/>  "health_check_timeout": 60,<br/>  "health_check_unhealthy_threshold": 7<br/>}</pre> | no |
 | <a name="input_task_cpu"></a> [task\_cpu](#input\_task\_cpu) | Task cpu. | `number` | n/a | yes |
 | <a name="input_task_memory"></a> [task\_memory](#input\_task\_memory) | Task memory. | `number` | n/a | yes |
 | <a name="input_task_policy_secrets_description"></a> [task\_policy\_secrets\_description](#input\_task\_policy\_secrets\_description) | The description of IAM policy for task secrets. | `string` | `"Policy that allows access to the ssm we created"` | no |

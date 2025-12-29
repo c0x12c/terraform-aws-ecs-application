@@ -3,7 +3,7 @@ resource "aws_lb_target_group" "this" {
 
   name        = "${var.name}-tg"
   port        = var.container_port
-  protocol    = "HTTP"
+  protocol    = var.container_protocol
   target_type = "ip"
   vpc_id      = var.vpc_id
 
@@ -12,15 +12,15 @@ resource "aws_lb_target_group" "this" {
   }
 
   health_check {
-    enabled             = var.health_check_enabled
-    healthy_threshold   = "2"
-    interval            = "120"
-    protocol            = "HTTP"
-    port                = var.container_port
-    matcher             = "200"
-    timeout             = "60"
-    path                = var.health_check_path
-    unhealthy_threshold = "7"
+    enabled             = var.target_group_configuration.health_check_enabled ? var.target_group_configuration.health_check_enabled : var.health_check_enabled
+    healthy_threshold   = var.target_group_configuration.health_check_healthy_threshold
+    interval            = var.target_group_configuration.health_check_interval
+    protocol            = var.target_group_configuration.health_check_protocol
+    port                = var.target_group_configuration.health_check_port
+    matcher             = var.target_group_configuration.health_check_matcher ? var.target_group_configuration.health_check_matcher : var.health_check_path
+    timeout             = var.target_group_configuration.health_check_timeout
+    path                = var.target_group_configuration.health_check_path
+    unhealthy_threshold = var.target_group_configuration.health_check_unhealthy_threshold
   }
 }
 
