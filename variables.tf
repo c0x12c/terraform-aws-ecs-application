@@ -116,6 +116,18 @@ variable "ecs_cluster_name" {
   type        = string
 }
 
+variable "health_check_enabled" {
+  description = "Specify whether enabling health check for this ECS service or not"
+  type        = bool
+  default     = true
+}
+
+variable "health_check_path" {
+  description = "Default path for health check requests"
+  type        = string
+  default     = "/health"
+}
+
 variable "force_new_deployment" {
   description = "Enable to force a new task deployment of the service"
   type        = bool

@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
   }
   ```
 * Although we add that new environment, but still keep the default one as the old version, with the same configuration.
+* DEPRECATED `health_check_enabled` and `health_check_path`, when we use the target_group_configuration, those will override those two variables. Those variables will keep for some version due to supportting backward compatible.
 
 ## [1.3.0]() (2025-11-03)
 
