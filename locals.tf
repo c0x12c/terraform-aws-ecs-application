@@ -108,6 +108,10 @@ locals {
         {
           containerName : "log_router"
           condition : "START"
+        },
+        {
+          containerName : "datadog"
+          condition : "START"
         }
       ] : [])
     },

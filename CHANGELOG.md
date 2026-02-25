@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.1.0]() (2026-02-25)
+
+### Features
+
+* Add Dependabot auto-merge GitHub Actions workflow:
+  * Automatically merges Dependabot PRs for GitHub Actions updates (all semver types).
+  * Automatically merges Dependabot PRs for Terraform patch updates.
+
+### Bug Fixes
+
+* Fix Datadog sidecar container dependency ordering:
+  * Add explicit dependency on Datadog container to ensure it starts before the main application container.
+
 ## [2.0.1]() (2025-12-29)
 
 ### Fix Bugs
