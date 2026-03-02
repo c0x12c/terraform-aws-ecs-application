@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.2.0]() (2026-03-01)
+
+### Features
+
+* Update Lambda runtime from `nodejs20.x` to `nodejs22.x`
+
 ## [2.1.0]() (2026-02-25)
 
 ### Features
