@@ -10,7 +10,7 @@ module "eventbridge-slack-notification" {
 
   lambda_source_file = "${path.module}/files/index.mjs"
   lambda_handler     = "index.handler"
-  lambda_runtime     = "nodejs20.x"
+  lambda_runtime     = "nodejs22.x"
 
   additional_iam_policy_arns = {
     lambda_ecs_policy = aws_iam_policy.lambda_ecs_policy[0].arn
