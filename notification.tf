@@ -2,7 +2,7 @@ module "eventbridge-slack-notification" {
   count = var.enabled_notification ? 1 : 0
 
   source  = "c0x12c/eventbridge-slack-notification/aws"
-  version = "~> 1.1.0"
+  version = "~> 1.2.0"
 
   name              = var.name
   environment       = var.environment
